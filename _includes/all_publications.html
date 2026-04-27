@@ -1,0 +1,18 @@
+<div class="publications">
+  {%- assign all_papers = site.scholar.bibliography_template | default: "bib" -%}
+  {%- if include.years -%}
+    {%- assign year_list = include.years -%}
+  {%- else -%}
+    {%- assign year_list = "2025,2024" | split: "," -%}
+  {%- endif -%}
+  {% for y in year_list %}
+    {%- capture filtered -%}
+      {% bibliography -f {{ site.scholar.bibliography }} -q @inproceedings[year={{ y }}], @article[year={{ y }}], @incollection[year={{ y }}] %}
+    {%- endcapture -%}
+    {%- assign trimmed = filtered | strip -%}
+    {% if trimmed != "" %}
+      <h3 class="year">{{ y }}</h3>
+      {{ filtered }}
+    {% endif %}
+  {% endfor %}
+</div>

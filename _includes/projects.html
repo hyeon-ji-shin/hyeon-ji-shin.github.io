@@ -1,0 +1,94 @@
+<!-- _includes/projects.html  --  seungjaebk-style 25/75 table layout, bilingual -->
+<table class="project-entry"
+  style="width:100%;border:0;border-spacing:0;border-collapse:separate;margin:0 auto;">
+  <tbody>
+    <tr>
+      <td style="padding:14px 16px;width:25%;vertical-align:middle;text-align:center;">
+        {%- if project.img -%}
+          <img src="{{ project.img | relative_url }}" alt="{{ project.title }}" width="220"
+            style="border-style:none;max-width:100%;" />
+        {%- else -%}
+          <div class="project-placeholder"
+            style="width:100%;aspect-ratio:4/3;background:rgba(0,0,0,.04);
+            border:1px dashed rgba(0,0,0,.15);
+            display:flex;align-items:center;justify-content:center;
+            font-size:11px;color:rgba(0,0,0,.4);letter-spacing:.1em;">
+            <span lang="en">NO IMAGE</span><span lang="ko">이미지 없음</span>
+          </div>
+        {%- endif -%}
+      </td>
+      <td style="width:75%;vertical-align:middle;padding:14px 16px;">
+        <span class="papertitle">
+          {%- if project.redirect -%}
+            <a href="{{ project.redirect }}">
+              <span lang="en">{{ project.title }}</span><span
+                lang="ko">{{ project.title_ko | default: project.title }}</span>
+            </a>
+          {%- elsif project.url -%}
+            <a href="{{ project.url | relative_url }}">
+              <span lang="en">{{ project.title }}</span><span
+                lang="ko">{{ project.title_ko | default: project.title }}</span>
+            </a>
+          {%- else -%}
+            <span lang="en">{{ project.title }}</span><span
+              lang="ko">{{ project.title_ko | default: project.title }}</span>
+          {%- endif -%}
+        </span>
+        <br />
+        {%- if project.description -%}
+          {%- comment -%} Detect whether description is a YAML list (bullets) or a plain string. {%- endcomment -%}
+          {%- assign desc_is_array = false -%}
+          {%- if project.description.first.size and project.description.first.size > 1 -%}
+            {%- assign desc_is_array = true -%}
+          {%- endif -%}
+          {%- assign desc_ko_is_array = false -%}
+          {%- if project.description_ko.first.size and project.description_ko.first.size > 1 -%}
+            {%- assign desc_ko_is_array = true -%}
+          {%- endif -%}
+
+          {%- if desc_is_array -%}
+            <ul style="margin-top:4px;margin-bottom:6px;padding-left:18px;">
+            {% for d in project.description %}
+              <li>
+                <span lang="en">{{ d }}</span>
+                {%- if desc_ko_is_array -%}
+                  <span lang="ko">{{ project.description_ko[forloop.index0] | default: d }}</span>
+                {%- else -%}
+                  <span lang="ko">{{ d }}</span>
+                {%- endif -%}
+              </li>
+            {% endfor %}
+            </ul>
+          {%- else -%}
+            <span lang="en">{{ project.description }}</span><span
+              lang="ko">{{ project.description_ko | default: project.description }}</span><br />
+          {%- endif -%}
+        {%- endif -%}
+        {%- if project.pub -%}
+          <span class="project-meta">
+            <span lang="en">{{ project.pub }}</span><span
+              lang="ko">{{ project.pub_ko | default: project.pub }}</span>
+          </span>
+          {%- if project.date_year_month %} &middot; {% endif -%}
+        {%- endif -%}
+        {%- if project.date -%}
+          <em style="font-style:italic;font-weight:normal;">
+            {%- if project.start_date -%}
+              {{ project.start_date | date: "%b %Y" }} – {{ project.date | date: "%b %Y" }}
+            {%- else -%}
+              {{ project.date | date: "%b %Y" }}
+            {%- endif -%}
+          </em>
+        {%- elsif project.date_year_month -%}
+          <em style="font-style:italic;font-weight:normal;">{{ project.date_year_month }}</em>
+        {%- elsif project.year -%}
+          <em style="font-style:italic;font-weight:normal;">{{ project.year }}</em>
+        {%- endif -%}
+        {%- if project.github -%}
+          <br />
+          <a href="{{ project.github }}" target="_blank" rel="noopener noreferrer">GitHub</a>
+        {%- endif -%}
+      </td>
+    </tr>
+  </tbody>
+</table>

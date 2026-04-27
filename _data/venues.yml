@@ -1,0 +1,9 @@
+# Venue colors / links used by jekyll-scholar to style abbreviation badges.
+"3DV":
+  url: https://3dvconf.github.io/
+"ICROS":
+  url: http://www.icros.org/
+"KROS":
+  url: http://www.kros.org/
+"KSBE":
+  url: https://kosombe.or.kr/

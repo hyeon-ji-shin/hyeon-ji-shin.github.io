@@ -1,0 +1,469 @@
+---
+layout: default
+---
+
+<!-- about.html -->
+<div class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      {% if site.title == "blank" -%}
+        <span lang="en">
+          <span class="font-weight-bold">{{ site.first_name }}</span>
+          {%- if site.middle_name %} {{ site.middle_name }}{% endif %}
+          {{ site.last_name }}
+        </span>
+        <span lang="ko">
+          <span class="font-weight-bold">{{ site.last_name_ko | default: site.last_name }}{{ site.first_name_ko | default: site.first_name }}</span>
+        </span>
+      {%- else -%}{{ site.title }}{%- endif %}
+    </h1>
+    <p class="desc">{{ page.subtitle }}</p>
+  </header>
+
+  <article>
+    {% if page.profile -%}
+    <div
+      class="profile float-{%- if page.profile.align == 'left' -%}left{%- else -%}right{%- endif -%}">
+      {%- if page.profile.image %}
+      {%- assign profile_image_path = page.profile.image | prepend: 'assets/img/' -%}
+
+      {% if page.profile.image_circular %}
+      {%- assign profile_image_class = "img-fluid z-depth-1 rounded-circle" -%}
+      {% else %}
+      {%- assign profile_image_class = "img-fluid z-depth-1 rounded" -%}
+      {% endif %}
+
+      {% include figure.html
+      path=profile_image_path
+      class=profile_image_class
+      alt=page.profile.image -%}
+      {% endif -%}
+      {%- if page.profile.address %}
+      <div class="address">
+        {{ page.profile.address }}
+      </div>
+      {%- endif %}
+    </div>
+    {%- endif %}
+
+    <div class="clearfix">
+      {{ content }}
+    </div>
+
+    <!-- Research Interests -->
+    {% if page.keywords %}
+    <h2 id="research">
+      <span lang="en">Research Interests</span><span lang="ko">연구 분야</span>
+    </h2>
+    <div class="keywords">
+      {% for kw in page.keywords -%}
+        {%- if kw.en -%}
+          <span class="keyword-pill">
+            <span lang="en">{{ kw.en }}</span><span lang="ko">{{ kw.ko | default: kw.en }}</span>
+          </span>
+        {%- else -%}
+          <span class="keyword-pill">{{ kw }}</span>
+        {%- endif -%}
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- News -->
+    {% if page.news and site.announcements.enabled -%}
+    <h2 id="news">
+      <span lang="en">News</span><span lang="ko">소식</span>
+    </h2>
+    {%- include news.html limit=true %}
+    {%- endif %}
+
+    <!-- Preprints -->
+    <h2 id="preprints">
+      <span lang="en">Preprints</span><span lang="ko">프리프린트</span>
+    </h2>
+    {% include preprints.html %}
+
+    <!-- Publications -->
+    <h2 id="publications">
+      <span lang="en">Publications</span><span lang="ko">출판물</span>
+    </h2>
+    {% include all_publications.html %}
+
+    <!-- Projects -->
+    {% if site.projects.size > 0 %}
+    <h2 id="projects">
+      <span lang="en">Projects</span><span lang="ko">프로젝트</span>
+    </h2>
+    {% assign sorted_projects = site.projects | sort: "start_date" | reverse %}
+    {% for project in sorted_projects %}
+      {% include projects.html %}
+    {% endfor %}
+    {% endif %}
+
+    <!-- Teaching & Working Experiences (from _experiences/) -->
+    {% if site.experiences and site.experiences.size > 0 %}
+    <h2 id="teaching">
+      <span lang="en">Teaching &amp; Working Experiences</span><span
+        lang="ko">교육 및 경력</span>
+    </h2>
+    {% assign sorted_exp = site.experiences | sort: "order" %}
+    {% for exp in sorted_exp %}
+    <table class="experience-entry"
+      style="width:100%;border:0;border-spacing:0;border-collapse:separate;margin:0 auto;">
+      <tbody>
+        <tr>
+          <td style="padding:14px 16px;width:25%;vertical-align:middle;text-align:center;">
+            {%- if exp.image -%}
+              <img src="{{ exp.image | relative_url }}" alt="{{ exp.institution }}" width="180"
+                style="border-style:none;max-width:100%;" />
+            {%- else -%}
+              <div class="exp-institution">
+                <strong>
+                  <span lang="en">{{ exp.institution }}</span><span
+                    lang="ko">{{ exp.institution_ko | default: exp.institution }}</span>
+                </strong>
+              </div>
+            {%- endif -%}
+          </td>
+          <td style="width:75%;vertical-align:middle;padding:14px 16px;">
+            <span class="papertitle">
+              <span lang="en">{{ exp.title }}</span><span
+                lang="ko">{{ exp.title_ko | default: exp.title }}</span>
+            </span><br />
+            <span lang="en">{{ exp.institution }}</span><span
+              lang="ko">{{ exp.institution_ko | default: exp.institution }}</span>
+            {%- if exp.year %}<br />
+            <em style="font-style:italic;font-weight:normal;">{{ exp.year }}</em>
+            {%- endif %}
+            {%- if exp.description -%}
+              <br />
+              <ul style="margin-top:6px;margin-bottom:0;padding-left:18px;">
+              {% for desc in exp.description %}
+                <li>
+                  <span lang="en">{{ desc }}</span>
+                  {%- if exp.description_ko -%}
+                    <span lang="ko">{{ exp.description_ko[forloop.index0] | default: desc }}</span>
+                  {%- else -%}
+                    <span lang="ko">{{ desc }}</span>
+                  {%- endif -%}
+                </li>
+              {% endfor %}
+              </ul>
+            {%- endif -%}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    {% endfor %}
+    {% endif %}
+
+    <!-- Achievements: Scholarships & Awards as separate subsections -->
+    {%- assign scholarships_entry = nil -%}
+    {%- assign awards_entry = nil -%}
+    {%- for entry in site.data.cv -%}
+      {%- if entry.title == "Scholarships" -%}{%- assign scholarships_entry = entry -%}{%- endif -%}
+      {%- if entry.title == "Awards" -%}{%- assign awards_entry = entry -%}{%- endif -%}
+    {%- endfor -%}
+    {% if scholarships_entry or awards_entry %}
+    <h2 id="achievements">
+      <span lang="en">Achievements</span><span lang="ko">장학금 및 수상</span>
+    </h2>
+
+    {% if scholarships_entry %}
+    <h3 class="subsection-title">
+      <span lang="en">Scholarships</span><span lang="ko">장학금</span>
+    </h3>
+    <ul class="achievements-list">
+      {% for content in scholarships_entry.contents %}
+        {% for item in content.items %}
+          <li>
+            <span lang="en">{{ item }}</span>
+            {%- if content.items_ko -%}
+              <span lang="ko">{{ content.items_ko[forloop.index0] | default: item }}</span>
+            {%- else -%}
+              <span lang="ko">{{ item }}</span>
+            {%- endif %}
+            <em>({{ content.year }})</em>
+          </li>
+        {% endfor %}
+      {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if awards_entry %}
+    <h3 class="subsection-title">
+      <span lang="en">Awards</span><span lang="ko">수상</span>
+    </h3>
+    <ul class="achievements-list">
+      {% for content in awards_entry.contents %}
+        {% for item in content.items %}
+          <li>
+            <span lang="en">{{ item }}</span>
+            {%- if content.items_ko -%}
+              <span lang="ko">{{ content.items_ko[forloop.index0] | default: item }}</span>
+            {%- else -%}
+              <span lang="ko">{{ item }}</span>
+            {%- endif %}
+            <em>({{ content.year }})</em>
+          </li>
+        {% endfor %}
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% endif %}
+
+    <!-- Volunteer Activities (from _volunteer/) -->
+    {% if site.volunteer and site.volunteer.size > 0 %}
+    <h2 id="volunteer">
+      <span lang="en">Volunteer Activities</span><span lang="ko">봉사활동</span>
+    </h2>
+    {% assign sorted_vol = site.volunteer | sort: "order" %}
+    {% for v in sorted_vol %}
+    <table class="volunteer-entry"
+      style="width:100%;border:0;border-spacing:0;border-collapse:separate;margin:0 auto;">
+      <tbody>
+        <tr>
+          <td style="padding:14px 16px;width:25%;vertical-align:middle;text-align:center;">
+            {%- if v.image -%}
+              <img src="{{ v.image | relative_url }}" alt="{{ v.title }}" width="180"
+                style="border-style:none;max-width:100%;" />
+            {%- else -%}
+              <div class="vol-org">
+                <strong>
+                  <span lang="en">{{ v.organization }}</span><span
+                    lang="ko">{{ v.organization_ko | default: v.organization }}</span>
+                </strong>
+              </div>
+            {%- endif -%}
+          </td>
+          <td style="width:75%;vertical-align:middle;padding:14px 16px;">
+            <span class="papertitle">
+              <span lang="en">{{ v.title }}</span><span
+                lang="ko">{{ v.title_ko | default: v.title }}</span>
+            </span><br />
+            <span lang="en">{{ v.organization }}</span><span
+              lang="ko">{{ v.organization_ko | default: v.organization }}</span>
+            {%- if v.year %}<br />
+            <em style="font-style:italic;font-weight:normal;">{{ v.year }}</em>
+            {%- endif %}
+            {%- if v.description -%}
+              <br />
+              <ul style="margin-top:6px;margin-bottom:0;padding-left:18px;">
+              {% for desc in v.description %}
+                <li>
+                  <span lang="en">{{ desc }}</span>
+                  {%- if v.description_ko -%}
+                    <span lang="ko">{{ v.description_ko[forloop.index0] | default: desc }}</span>
+                  {%- else -%}
+                    <span lang="ko">{{ desc }}</span>
+                  {%- endif -%}
+                </li>
+              {% endfor %}
+              </ul>
+            {%- endif -%}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    {% endfor %}
+    {% endif %}
+
+    <!-- Social -->
+    {%- if page.social %}
+    <div class="social">
+      <div class="contact-icons">
+        {% include social.html %}
+      </div>
+
+      <div class="contact-note">
+        {{ site.contact_note }}
+      </div>
+
+    </div>
+    {%- endif %}
+  </article>
+
+</div>
+
+<style>
+  /* Language toggle: hide elements whose lang doesn't match the active site lang. */
+  html[lang="en"] [lang="ko"] { display: none !important; }
+  html[lang="ko"] [lang="en"] { display: none !important; }
+
+  /* Language toggle button label visibility */
+  #lang-toggle .lang-label-ko { display: none; }
+  html[lang="ko"] #lang-toggle .lang-label-ko { display: inline; }
+  html[lang="ko"] #lang-toggle .lang-label-en { display: none; }
+  html[lang="en"] #lang-toggle .lang-label-en { display: inline; }
+  #lang-toggle {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 0 6px;
+    cursor: pointer;
+  }
+  #lang-toggle:hover { opacity: 0.7; }
+
+  /* Header links row (CV / GitHub / LinkedIn / Tech Blog) */
+  .header-links {
+    margin: 8px 0 24px;
+    font-size: 0.95rem;
+  }
+  .header-links a,
+  .header-links a > span,
+  .header-links a:visited {
+    color: #1772d0 !important;
+    text-decoration: none;
+  }
+  .header-links a:hover,
+  .header-links a:hover > span {
+    color: #B509AC !important;
+    text-decoration: underline;
+  }
+
+  /* seungjaebk-style typography for entry titles */
+  .papertitle {
+    font-weight: 700;
+    font-size: 1.05em;
+    line-height: 1.4;
+  }
+  .papertitle a { color: inherit; }
+  .papertitle a:hover { color: #B509AC; }
+
+  .bib-entry, .project-entry, .experience-entry, .volunteer-entry {
+    border-bottom: 1px solid rgba(0,0,0,.06);
+  }
+  .bib-entry:last-child, .project-entry:last-child,
+  .experience-entry:last-child, .volunteer-entry:last-child {
+    border-bottom: none;
+  }
+  .bib-links a, .achievements-block a, .header-links a {
+    color: #1772d0;
+  }
+  .bib-links a:hover, .achievements-block a:hover {
+    color: #B509AC;
+  }
+  .venue-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    background: #f0f0f0;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.85em;
+    color: #555;
+  }
+  .project-meta {
+    color: #666;
+    font-size: 0.95em;
+  }
+
+  /* Preprints: hide jekyll-scholar's auto-generated <ol> numbering */
+  .preprints ol.bibliography {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .preprints ol.bibliography li {
+    margin-bottom: 0.5rem;
+  }
+  .preprints .preprint-status {
+    font-style: italic;
+  }
+
+  /* Sub-task dates inside project description bullets — smaller, dimmer, mono */
+  .project-entry li em,
+  .project-entry li .task-date {
+    font-size: 0.82em;
+    color: #888;
+    font-family: "JetBrains Mono", "Roboto Mono", ui-monospace, SFMono-Regular, monospace;
+    font-style: normal;
+    letter-spacing: 0.02em;
+    margin-left: 4px;
+  }
+
+  /* Section spacing — generous gap between top-level sections */
+  article > h2[id] {
+    margin-top: 64px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(0,0,0,.08);
+  }
+  article > h2[id]:first-of-type {
+    margin-top: 32px;
+  }
+
+  /* Subsection (Scholarships / Awards) spacing */
+  .subsection-title {
+    margin-top: 24px;
+    margin-bottom: 8px;
+    font-size: 1.15rem;
+    font-weight: 600;
+  }
+
+  /* Achievements list — bullets with tight line spacing */
+  .achievements-list {
+    padding-left: 22px;
+    margin: 6px 0 18px;
+  }
+  .achievements-list li {
+    margin-bottom: 4px;
+    line-height: 1.45;
+  }
+  .achievements-list li em {
+    color: #666;
+    font-size: 0.92em;
+  }
+
+  .keywords {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 10px;
+    margin: 0 0 24px;
+  }
+
+  .keyword-pill {
+    display: inline-block;
+    padding: 4px 12px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 999px;
+    font-size: 0.85rem;
+    color: var(--global-text-color, #333);
+    background: transparent;
+  }
+
+  .publications h3.year {
+    margin-top: 18px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(0,0,0,.08);
+    padding-bottom: 4px;
+  }
+
+  /* Smooth scroll for in-page anchor links */
+  html { scroll-behavior: smooth; }
+  /* Offset for fixed navbar so anchored sections aren't hidden under it. */
+  h2[id] { scroll-margin-top: 80px; }
+
+  /* Show BibTeX block on click */
+  .bibtex.hidden.show { display: block !important; }
+</style>
+
+<script>
+  // BibTeX & Abstract toggle on link click
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.bibtex-toggle').forEach(function (a) {
+      a.addEventListener('click', function () {
+        var bib = a.closest('td').querySelector('.bibtex');
+        if (!bib) return;
+        bib.style.display = bib.style.display === 'block' ? 'none' : 'block';
+      });
+    });
+    document.querySelectorAll('.abstract-toggle').forEach(function (a) {
+      a.addEventListener('click', function () {
+        var abs = a.closest('td').querySelector('.abstract');
+        if (!abs) return;
+        abs.style.display = abs.style.display === 'block' ? 'none' : 'block';
+      });
+    });
+  });
+</script>

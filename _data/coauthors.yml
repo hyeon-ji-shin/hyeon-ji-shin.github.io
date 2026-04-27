@@ -1,0 +1,6 @@
+# Coauthor name disambiguation for jekyll-scholar.
+# Add entries as collaborators are added.
+
+"Kim":
+  - firstname: ["Pyojin", "P."]
+    url: https://scholar.google.co.kr/citations?user=NHpe_8IAAAAJ&hl=en

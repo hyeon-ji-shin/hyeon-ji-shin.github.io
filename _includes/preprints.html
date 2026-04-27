@@ -1,0 +1,14 @@
+<div class="preprints">
+  {%- capture preprint_html -%}
+    {% bibliography -f {{ site.scholar.bibliography }} -q @*[preprint=true]* -T preprint %}
+  {%- endcapture -%}
+  {%- assign trimmed = preprint_html | strip -%}
+  {% if trimmed != "" %}
+    {{ preprint_html }}
+  {% else %}
+    <p class="text-muted">
+      <span lang="en">No preprints yet. Tag a bibliography entry with <code>preprint = {true}</code> to list it here.</span>
+      <span lang="ko">아직 등록된 프리프린트가 없습니다.</span>
+    </p>
+  {% endif %}
+</div>

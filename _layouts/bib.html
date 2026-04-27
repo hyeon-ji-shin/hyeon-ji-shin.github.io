@@ -1,0 +1,134 @@
+---
+---
+<!-- _layouts/bib.html  --  seungjaebk-style 25/75 table layout, bilingual -->
+<table class="bib-entry"
+  style="width:100%;border:0;border-spacing:0;border-collapse:separate;margin:0 auto;">
+  <tbody>
+    <tr>
+      <td style="padding:14px 16px;width:25%;vertical-align:middle;text-align:center;">
+        {%- if entry.preview -%}
+          {%- if entry.preview contains '://' -%}
+            <img src="{{ entry.preview }}" alt="{{ entry.title }}" width="220"
+              style="border-style:none;max-width:100%;" />
+          {%- else -%}
+            {%- assign preview_path = entry.preview | prepend: '/assets/img/publication_preview/' -%}
+            <img src="{{ preview_path | relative_url }}" alt="{{ entry.title }}" width="220"
+              style="border-style:none;max-width:100%;" />
+          {%- endif -%}
+        {%- elsif entry.abbr -%}
+          <span class="venue-badge">{{ entry.abbr }}</span>
+        {%- endif -%}
+      </td>
+      <td style="width:75%;vertical-align:middle;padding:14px 16px;">
+        <span class="papertitle">
+          <span lang="en">{{ entry.title }}</span><span lang="ko">{{ entry.title_ko | default: entry.title }}</span>
+        </span>
+        <br />
+
+        {%- comment -%} Authors: bilingual.  EN uses the complex array loop with self-bolding and coauthor links.  KO uses the author_ko string directly. {%- endcomment -%}
+        {%- if entry.author_array -%}
+          {%- if entry.author_ko -%}<span lang="en">{%- endif -%}
+          {%- for author in entry.author_array -%}
+            {%- assign author_last = author.last | remove: "*" | remove: "+" | remove: "†" |
+              remove: "&" | remove: "¶" | remove: "^" -%}
+            {%- assign is_self = false -%}
+            {%- if site.scholar.last_name contains author_last -%}
+              {%- if site.scholar.first_name contains author.first -%}
+                {%- assign is_self = true -%}
+              {%- endif -%}
+            {%- endif -%}
+            {%- assign coauthor_url = nil -%}
+            {%- if site.data.coauthors[author_last] -%}
+              {%- for coauthor in site.data.coauthors[author_last] -%}
+                {%- if coauthor.firstname contains author.first -%}
+                  {%- assign coauthor_url = coauthor.url -%}
+                  {%- break -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
+            {%- if forloop.first == false -%}, {% endif -%}
+            {%- if is_self -%}
+              <strong>{{ author.first }} {{ author.last }}</strong>
+            {%- elsif coauthor_url -%}
+              <a href="{{ coauthor_url }}">{{ author.first }} {{ author.last }}</a>
+            {%- else -%}
+              {{ author.first }} {{ author.last }}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if entry.author_ko -%}</span><span lang="ko">{{ entry.author_ko }}</span>{%- endif -%}
+          <br />
+        {%- endif -%}
+
+        {%- assign proceedings = "inproceedings,incollection" | split: "," -%}
+        {%- assign thesis = "thesis,mastersthesis,phdthesis" | split: "," -%}
+        {%- if entry.type == "article" -%}
+          <em>
+            <span lang="en">{{ entry.journal }}</span><span lang="ko">{{ entry.journal_ko | default: entry.journal }}</span>
+            {%- if entry.year %}, {{ entry.year }}{% endif -%}
+          </em>
+        {%- elsif proceedings contains entry.type -%}
+          <em>
+            <span lang="en">{{ entry.booktitle }}</span><span lang="ko">{{ entry.booktitle_ko | default: entry.booktitle }}</span>
+            {%- if entry.year %}, {{ entry.year }}{% endif -%}
+          </em>
+        {%- elsif thesis contains entry.type -%}
+          <em>{{ entry.school }}{% if entry.year %}, {{ entry.year }}{% endif %}</em>
+        {%- elsif entry.year -%}
+          <em>{{ entry.year }}</em>
+        {%- endif -%}
+        <br />
+
+        <span class="bib-links">
+          {%- if entry.website -%}
+            <a href="{{ entry.website }}" target="_blank" rel="noopener noreferrer">Project Page</a>
+          {%- endif -%}
+          {%- if entry.pdf -%}
+            {% if forloop.index0 == 0 or entry.website %} | {% endif -%}
+            {% if entry.pdf contains '://' -%}
+              <a href="{{ entry.pdf }}" target="_blank" rel="noopener noreferrer">PDF</a>
+            {%- else -%}
+              <a href="{{ entry.pdf | prepend: '/assets/pdf/' | relative_url }}" target="_blank"
+                rel="noopener noreferrer">PDF</a>
+            {%- endif -%}
+          {%- endif -%}
+          {%- if entry.arxiv -%}
+            {% if entry.website or entry.pdf %} | {% endif -%}
+            <a href="https://arxiv.org/abs/{{ entry.arxiv }}" target="_blank"
+              rel="noopener noreferrer">arXiv</a>
+          {%- endif -%}
+          {%- if entry.code -%}
+            {% if entry.website or entry.pdf or entry.arxiv %} | {% endif -%}
+            <a href="{{ entry.code }}" target="_blank" rel="noopener noreferrer">Code</a>
+          {%- endif -%}
+          {%- if entry.video -%}
+            {% if entry.website or entry.pdf or entry.arxiv or entry.code %} | {% endif -%}
+            <a href="{{ entry.video }}" target="_blank" rel="noopener noreferrer">Video</a>
+          {%- endif -%}
+          {%- if entry.paper -%}
+            {% if entry.website or entry.pdf or entry.arxiv or entry.code or entry.video %} | {% endif -%}
+            <a href="{{ entry.paper }}" target="_blank" rel="noopener noreferrer">Paper</a>
+          {%- endif -%}
+        </span>
+
+        {%- comment -%}
+          Abstract content kept here (bilingual) but not shown right now.
+          To re-enable as a click-to-show toggle later, wrap an "Abstract" link
+          back into the .bib-links span and remove `display:none` here, or revert
+          to the click-to-toggle pattern that mirrors .bibtex-toggle.
+        {%- endcomment -%}
+        {%- if entry.abstract and false -%}
+          <div class="abstract"
+            style="display:none;margin-top:8px;padding:10px 14px;font-size:0.95em;color:#444;line-height:1.5;background:rgba(0,0,0,.03);border-radius:4px;">
+            <span lang="en">{{ entry.abstract }}</span><span lang="ko">{{ entry.abstract_ko | default: entry.abstract }}</span>
+          </div>
+        {%- endif -%}
+
+        {%- if entry.bibtex_show -%}
+          <div class="bibtex hidden" style="display:none;">
+            {% highlight bibtex %}{{ entry.bibtex | hideCustomBibtex }}{% endhighlight %}
+          </div>
+        {%- endif -%}
+      </td>
+    </tr>
+  </tbody>
+</table>

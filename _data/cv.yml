@@ -1,0 +1,66 @@
+- title: General Information
+  type: map
+  contents:
+    - name: Full Name
+      value: Hyeon-ji Shin (신현지)
+    - name: Languages
+      value: Korean (native), English
+
+- title: Education
+  type: time_table
+  contents:
+    - title: M.S. in Mechanical and Robotics Engineering
+      institution: Gwangju Institute of Science and Technology (GIST)
+      year: 2025 - Now
+      description:
+        - Machine Perception and Intelligence Lab (MPIL), advised by Prof. Pyojin Kim.
+        - Research focus&#58; SLAM, robust localization, 3D computer vision.
+    - title: B.S. in Electrical and Computer Engineering
+      institution: University of Seoul (UOS)
+      year: 2021 - 2025
+      description:
+        - Worked with Prof. Myunjoong Hwang in the UOS Robotics Lab on object detection and path planning for autonomous vehicles (2023 - 2024).
+
+- title: Scholarships
+  type: time_table
+  contents:
+    - year: 2025
+      items:
+        - GIST Admission Excellence Scholarship
+      items_ko:
+        - GIST 입학 우수 장학금
+    - year: Autumn 2022, Spring 2023
+      items:
+        - Boeing Scholarship
+      items_ko:
+        - 보잉 장학금
+    - year: Spring 2022
+      items:
+        - UOS Talent Scholarship
+      items_ko:
+        - 서울시립대 시대인재 장학금
+    - year: 2021
+      items:
+        - UOS Admission Excellence Scholarship
+      items_ko:
+        - 서울시립대 입학 우수 장학금
+
+- title: Awards
+  type: time_table
+  contents:
+    - year: 2024
+      items:
+        - 2024 Embedded SW Competition (Autonomous Racing Section) &#8212; Honorable Mention 
+      items_ko:
+        - 임베디드SW경진대회 자율주행레이싱부문 (입선, 임베디드소프트웨어-시스템산업협회상)
+    - year: Aug. 2024
+      items:
+        - 2024 Autonomous Robot Race Challenge (Round 2) &#8212; 2nd Place, Excellence Award
+      items_ko:
+        - 자율주행 로봇 레이스 2024 2차 대회 (2등, 최우수상) 
+    - year: Feb. 2024
+      items:
+        - 2023 UOS Winter Engineering Research Internship Presentation &#8212; Honorable Mention 
+      items_ko:
+        - 2023년 서울시립대 겨울학기 공학연구인턴십 성과발표회 (장려상)
+      

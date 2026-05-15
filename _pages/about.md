@@ -16,21 +16,21 @@ tistory_url: https://hyeo-o.tistory.com
 
 keywords:
   - en: Localization
-    ko: 추정
+    ko: 자세 추정
   - en: Spatial AI
     ko: 공간 AI
   - en: 3D Computer Vision
     ko: 3D 컴퓨터 비전
   - en: Multiple-View Geometry
-    ko: 다시점 기하학
+    ko: 다중 시점 기하학
+  - en: Visual Odometry
+    ko: 시각 오도메트리
   - en: LiDAR–Inertial Odometry
-    ko: LiDAR-관성 오도메트리
+    ko: 라이다-관성 오도메트리
   - en: Autonomous Driving
     ko: 자율주행
   - en: UAV
     ko: 무인 항공기
-  - en: Thermal Imaging
-    ko: 열화상 이미징
   - en: Low-light
     ko: 저조도
 
@@ -43,7 +43,7 @@ social: true            # social icons at the bottom of the page
 ---
 
 <p class="header-links">
-  <a href="{{ '/assets/pdf/personal_cv_2025.pdf' | relative_url }}" target="_blank" rel="noopener noreferrer">
+  <a href="{{ '/assets/pdf/HyeonjiShin_CurriculumVitae_260515.pdf' | relative_url }}" target="_blank" rel="noopener noreferrer">
     <span lang="en">CV</span><span lang="ko">이력서</span>
   </a>
   &nbsp;/&nbsp;

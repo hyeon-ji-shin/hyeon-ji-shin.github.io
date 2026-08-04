@@ -3,11 +3,11 @@
   {%- if include.years -%}
     {%- assign year_list = include.years -%}
   {%- else -%}
-    {%- assign year_list = "2025,2024" | split: "," -%}
+    {%- assign year_list = "2026,2025,2024" | split: "," -%}
   {%- endif -%}
   {% for y in year_list %}
     {%- capture filtered -%}
-      {% bibliography -f {{ site.scholar.bibliography }} -q @inproceedings[year={{ y }}], @article[year={{ y }}], @incollection[year={{ y }}] %}
+      {% bibliography -f {{ site.scholar.bibliography }} -q @inproceedings[year={{ y }}], @article[year={{ y }}], @incollection[year={{ y }}], @misc[year={{ y }},preprint=false] %}
     {%- endcapture -%}
     {%- assign trimmed = filtered | strip -%}
     {% if trimmed != "" %}

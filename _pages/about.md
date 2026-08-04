@@ -43,7 +43,7 @@ social: true            # social icons at the bottom of the page
 ---
 
 <p class="header-links">
-  <a href="{{ '/assets/pdf/HyeonjiShin_CurriculumVitae_260515.pdf' | relative_url }}" target="_blank" rel="noopener noreferrer">
+  <a href="{{ '/assets/pdf/HyeonjiShin_CurriculumVitae_260722.pdf' | relative_url }}" target="_blank" rel="noopener noreferrer">
     <span lang="en">CV</span><span lang="ko">이력서</span>
   </a>
   &nbsp;/&nbsp;
